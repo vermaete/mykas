@@ -4,10 +4,10 @@ header:
 machine: raspberrypi4
 distro: poky
 target:
-  - core-image-minimal-xfce
+  - core-image-base
 
 repos:
-  meta-raspberry:
+  meta-raspberrypi:
     url: https://github.com/agherzan/meta-raspberrypi
     path: layers/meta-raspberrypi
     refspec: master
@@ -31,9 +31,6 @@ repos:
       meta-networking:
       meta-perl:
       meta-webserver:
-      meta-gnome:
-      meta-xfce:
-      meta-multimedia:
 
   meta-qt5:
     url: https://github.com/meta-qt5/meta-qt5/
@@ -45,7 +42,6 @@ bblayers_conf_header:
     POKY_BBLAYERS_CONF_VERSION = "2"
     BBPATH = "${TOPDIR}"
     BBFILES ?= ""
-
 local_conf_header:
   standard: |
     CONF_VERSION = "2"
@@ -57,24 +53,22 @@ local_conf_header:
     EXTRA_IMAGE_FEATURES = "debug-tweaks"
   diskmon: |
     BB_DISKMON_DIRS = "\
-      STOPTASKS,${TMPDIR},1G,100K \
-      STOPTASKS,${DL_DIR},1G,100K \
-      STOPTASKS,${SSTATE_DIR},1G,100K \
-      STOPTASKS,/tmp,100M,100K \
-      ABORT,${TMPDIR},100M,1K \
-      ABORT,${DL_DIR},100M,1K \
-      ABORT,${SSTATE_DIR},100M,1K \
-      ABORT,/tmp,10M,1K"
+        STOPTASKS,${TMPDIR},1G,100K \
+        STOPTASKS,${DL_DIR},1G,100K \
+        STOPTASKS,${SSTATE_DIR},1G,100K \
+        STOPTASKS,/tmp,100M,100K \
+        ABORT,${TMPDIR},100M,1K \
+        ABORT,${DL_DIR},100M,1K \
+        ABORT,${SSTATE_DIR},100M,1K \
+        ABORT,/tmp,10M,1K"
   network: |
     DL_DIR = "/var/lib/yocto/downloads"
     SSTATE_DIR = "/var/lib/yocto/sstate-cache"
-    INHERIT += "own-mirrors"
-    SOURCE_MIRROR_URL = "http://mirror/"
-    #BB_NO_NETWORK = "1"
-    BB_GENERATE_MIRROR_TARBALLS = "1"
   testing: |
     DISTRO_FEATURES:append = " systemd"
-    DISTRO_FEATURES:remove = " alsa argp bluetooth pcmcia nfs 3g nfc ptest pulseaudio "
+    VIRTUAL-RUNTIME_init_manager = "systemd"
     INHERIT += "buildhistory"
     BUILDHISTORY_COMMIT = "1"
     IMAGE_INSTALL:append = " netdata"
+    IMAGE_INSTALL:append = " wpa-supplicant"
+    
