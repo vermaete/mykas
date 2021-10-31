@@ -70,5 +70,6 @@ local_conf_header:
     INHERIT += "buildhistory"
     BUILDHISTORY_COMMIT = "1"
     IMAGE_INSTALL:append = " netdata"
+    #PREFERRED_VERSION_netdata = "git"
     IMAGE_INSTALL:append = " wpa-supplicant"
     
