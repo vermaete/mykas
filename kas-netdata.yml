@@ -71,5 +71,7 @@ local_conf_header:
     BUILDHISTORY_COMMIT = "1"
     IMAGE_INSTALL:append = " netdata"
     #PREFERRED_VERSION_netdata = "git"
+    hostname:pn-base-files = "rpi4-netdata"
     IMAGE_INSTALL:append = " wpa-supplicant"
-    
+    #IMAGE_INSTALL:append = " lmsensors"
+    IMAGE_INSTALL:append = " dropbear"
