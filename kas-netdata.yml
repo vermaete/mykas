@@ -1,7 +1,7 @@
 header:
   version: 8
 
-machine: raspberrypi4
+machine: raspberrypi4-64
 distro: poky
 target:
   - core-image-base
@@ -65,6 +65,7 @@ local_conf_header:
     DL_DIR = "/var/lib/yocto/downloads"
     SSTATE_DIR = "/var/lib/yocto/sstate-cache"
   testing: |
+    DISTRO_FEATURES:remove = " ptest"
     DISTRO_FEATURES:append = " systemd"
     VIRTUAL-RUNTIME_init_manager = "systemd"
     INHERIT += "buildhistory"
