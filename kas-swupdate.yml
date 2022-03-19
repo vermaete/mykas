@@ -4,7 +4,7 @@ header:
 machine: raspberrypi4-64
 distro: poky
 target:
-  - core-image-base
+  - update-image
 
 repos:
   meta-raspberrypi:
@@ -30,13 +30,17 @@ repos:
       meta-python:
       meta-networking:
       meta-perl:
-      meta-webserver:
 
-  meta-qt5:
-    url: https://github.com/meta-qt5/meta-qt5/
-    path: layers/meta-qt5
+  meta-swupdate:
+    url: https://github.com/sbabic/meta-swupdate.git
+    path: layers/meta-swupdate
     refspec: master
 
+  meta-swupate-boards:
+    url: https://github.com/sbabic/meta-swupdate-boards.git
+    path: layers/meta-swupdate-boards
+    refspec: master
+    
 bblayers_conf_header:
   standard: |
     POKY_BBLAYERS_CONF_VERSION = "2"
@@ -64,18 +68,12 @@ local_conf_header:
   network: |
     DL_DIR = "/var/lib/yocto/downloads"
     SSTATE_DIR = "/var/lib/yocto/sstate-cache"
+  swupdate: |
+    RPI_USE_U_BOOT = "1"
+    IMAGE_FSTYPES:append = " ext4.gz"
   testing: |
     DISTRO_FEATURES:remove = " ptest"
     DISTRO_FEATURES:append = " systemd"
     VIRTUAL-RUNTIME_init_manager = "systemd"
     INHERIT += "buildhistory"
     BUILDHISTORY_COMMIT = "1"
-    IMAGE_INSTALL:append = " netdata"
-    #PREFERRED_VERSION_netdata = "git"
-    hostname:pn-base-files = "rpi4-netdata"
-    IMAGE_INSTALL:append = " wpa-supplicant"
-    IMAGE_INSTALL:append = " lmsensors"
-    IMAGE_INSTALL:append = " dropbear"
-    IMAGE_INSTALL:append = " curl"
-  pwm: |
-    ENABLE_PWM = "1"

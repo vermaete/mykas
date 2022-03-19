@@ -58,10 +58,10 @@ local_conf_header:
         STOPTASKS,${DL_DIR},1G,100K \
         STOPTASKS,${SSTATE_DIR},1G,100K \
         STOPTASKS,/tmp,100M,100K \
-        ABORT,${TMPDIR},100M,1K \
-        ABORT,${DL_DIR},100M,1K \
-        ABORT,${SSTATE_DIR},100M,1K \
-        ABORT,/tmp,10M,1K"
+        HALT,${TMPDIR},100M,1K \
+        HALT,${DL_DIR},100M,1K \
+        HALT,${SSTATE_DIR},100M,1K \
+        HALT,/tmp,10M,1K"
   network: |
     DL_DIR = "/var/lib/yocto/downloads"
     SSTATE_DIR = "/var/lib/yocto/sstate-cache"
@@ -72,3 +72,4 @@ local_conf_header:
     BUILDHISTORY_COMMIT = "1"
     IMAGE_INSTALL:append = " wpa-supplicant"
     IMAGE_INSTALL:append = " opendds"
+    hostname:pn-base-files = "rpi4-opendds"
