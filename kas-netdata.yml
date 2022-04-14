@@ -8,9 +8,9 @@ target:
 
 repos:
   meta-raspberrypi:
-    url: https://github.com/agherzan/meta-raspberrypi
+    url: https://github.com/vermaete/meta-raspberrypi
     path: layers/meta-raspberrypi
-    refspec: master
+    refspec: jver/pwm
 
   poky:
     url: https://git.yoctoproject.org/git/poky
@@ -49,8 +49,10 @@ local_conf_header:
     SDKMACHINE = "x86_64"
     USER_CLASSES = "buildstats"
     PATCHRESOLVE = "noop"
+    INHERIT += "rm_work"
   debug-tweaks: |
     EXTRA_IMAGE_FEATURES = "debug-tweaks"
+    IMAGE_ROOTFS_EXTRA_SPACE = "1524288"
   diskmon: |
     BB_DISKMON_DIRS = "\
         STOPTASKS,${TMPDIR},1G,100K \
@@ -77,5 +79,7 @@ local_conf_header:
     IMAGE_INSTALL:append = " lmsensors"
     IMAGE_INSTALL:append = " dropbear"
     IMAGE_INSTALL:append = " curl"
+    IMAGE_INSTALL:append = " python3-core"
+    IMAGE_INSTALL:append = " python3-modules"
   pwm: |
     ENABLE_PWM = "1"
