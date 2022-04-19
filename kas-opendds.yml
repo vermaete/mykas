@@ -6,7 +6,7 @@ header:
 machine: raspberrypi4-64
 distro: poky
 target:
-  - core-image-minimal
+  - core-image-minimal-xfce
 
 repos:
   meta-raspberrypi:
@@ -32,6 +32,14 @@ repos:
       meta-python:
       meta-networking:
       meta-perl:
+      meta-gnome:
+      meta-multimedia:
+      meta-xfce:
+
+  meta-qt5:
+    url: https://github.com/meta-qt5/meta-qt5/
+    path: layers/meta-qt5
+    refspec: master
 
   meta-openddds:
     url: https://github.com/vermaete/meta-opendds.git
@@ -52,6 +60,7 @@ local_conf_header:
     PATCHRESOLVE = "noop"
   debug-tweaks: |
     EXTRA_IMAGE_FEATURES = "debug-tweaks"
+    IMAGE_ROOTFS_EXTRA_SPACE = "1524288"
   diskmon: |
     BB_DISKMON_DIRS = "\
         STOPTASKS,${TMPDIR},1G,100K \
@@ -66,6 +75,7 @@ local_conf_header:
     DL_DIR = "/var/lib/yocto/downloads"
     SSTATE_DIR = "/var/lib/yocto/sstate-cache"
   testing: |
+    DISTRO_FEATURES:remove = " ptest"
     DISTRO_FEATURES:append = " systemd"
     VIRTUAL-RUNTIME_init_manager = "systemd"
     INHERIT += "buildhistory"
