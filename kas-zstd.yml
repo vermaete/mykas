@@ -1,12 +1,10 @@
-# Kas file to build the core-image-minimal with OpenDDS for Raspberry-pi.
-
 header:
   version: 8
 
 machine: raspberrypi4-64
 distro: poky
 target:
-  - core-image-minimal-xfce
+  - core-image-base
 
 repos:
   meta-raspberrypi:
@@ -32,19 +30,7 @@ repos:
       meta-python:
       meta-networking:
       meta-perl:
-      meta-gnome:
-      meta-multimedia:
-      meta-xfce:
-
-  meta-qt5:
-    url: https://github.com/meta-qt5/meta-qt5/
-    path: layers/meta-qt5
-    refspec: master
-
-  meta-openddds:
-    url: https://github.com/oci-labs/meta-opendds
-    path: layers/meta-openddds
-    refspec: master
+      meta-webserver:
 
 bblayers_conf_header:
   standard: |
@@ -75,10 +61,9 @@ local_conf_header:
     DL_DIR = "/var/lib/yocto/downloads"
     SSTATE_DIR = "/var/lib/yocto/sstate-cache"
   testing: |
-    DISTRO_FEATURES:append = " systemd"
-    VIRTUAL-RUNTIME_init_manager = "systemd"
+    DISTRO_FEATURES:remove = " ptest"
     INHERIT += "buildhistory"
     BUILDHISTORY_COMMIT = "1"
-    IMAGE_INSTALL:append = " wpa-supplicant"
-    IMAGE_INSTALL:append = " opendds"
-    hostname:pn-base-files = "rpi4-opendds"
+    IMAGE_INSTALL:append = " zstd"
+    hostname:pn-base-files = "rpi4-zstd"
+    IMAGE_INSTALL:append = " dropbear"
