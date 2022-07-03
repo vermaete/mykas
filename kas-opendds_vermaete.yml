@@ -17,7 +17,7 @@ repos:
   poky:
     url: https://git.yoctoproject.org/git/poky
     path: layers/poky
-    refspec: kirkstone
+    refspec: master
     layers:
       meta:
       meta-poky:
@@ -26,7 +26,7 @@ repos:
   meta-openembedded:
     url: http://git.openembedded.org/meta-openembedded
     path: layers/meta-openembedded
-    refspec: kirkstone
+    refspec: master
     layers:
       meta-oe:
       meta-python:
@@ -39,7 +39,7 @@ repos:
   meta-qt5:
     url: https://github.com/meta-qt5/meta-qt5/
     path: layers/meta-qt5
-    refspec: kirkstone
+    refspec: master
 
   meta-openddds:
     url: https://github.com/vermaete/meta-opendds.git
@@ -81,6 +81,6 @@ local_conf_header:
     BUILDHISTORY_COMMIT = "1"
     IMAGE_INSTALL:append = " wpa-supplicant"
     IMAGE_INSTALL:append = " opendds"
-    PACKAGECONFIG:append:opendds = " ishapes"
+    PACKAGECONFIG:append:pn-opendds = " ishapes"
     hostname:pn-base-files = "rpi4-opendds"
     INHERIT += "cve-check"
