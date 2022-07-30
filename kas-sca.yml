@@ -72,3 +72,5 @@ local_conf_header:
   sca: |
     INHERIT += "sca"
     SCA_ENABLED_MODULES_IMAGE = "lynis"
+    BBMASK += "python3-beautifulsoup4-native_4.11.1.bb"
+    BBMASK += "python3-soupsieve-native_2.3.2.bb"
