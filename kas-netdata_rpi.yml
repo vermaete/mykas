@@ -1,0 +1,85 @@
+header:
+  version: 8
+
+machine: raspberrypi4-64
+distro: poky
+target:
+  - core-image-minimal-xfce
+
+repos:
+  meta-raspberrypi:
+    url: https://github.com/agherzan/meta-raspberrypi
+    path: layers/meta-raspberrypi
+    branch: master
+
+  poky:
+    url: https://git.yoctoproject.org/git/poky
+    path: layers/poky
+    branch: master
+    layers:
+      meta:
+      meta-poky:
+      meta-yocto-bsp:
+
+  meta-openembedded:
+    url: http://git.openembedded.org/meta-openembedded
+    path: layers/meta-openembedded
+    branch: master
+    layers:
+      meta-oe:
+      meta-python:
+      meta-networking:
+      meta-perl:
+      meta-webserver:
+      meta-xfce:
+      meta-gnome:
+      meta-multimedia:
+
+  meta-qt5:
+    url: https://github.com/meta-qt5/meta-qt5/
+    path: layers/meta-qt5
+    branch: master
+
+bblayers_conf_header:
+  standard: |
+    POKY_BBLAYERS_CONF_VERSION = "2"
+    BBPATH = "${TOPDIR}"
+    BBFILES ?= ""
+local_conf_header:
+  standard: |
+    CONF_VERSION = "2"
+    PACKAGE_CLASSES = "package_rpm"
+    SDKMACHINE = "x86_64"
+    USER_CLASSES = "buildstats"
+    PATCHRESOLVE = "noop"
+  debug-tweaks: |
+    EXTRA_IMAGE_FEATURES = "debug-tweaks"
+    IMAGE_ROOTFS_EXTRA_SPACE = "1524288"
+  diskmon: |
+    BB_DISKMON_DIRS = "\
+        STOPTASKS,${TMPDIR},1G,100K \
+        STOPTASKS,${DL_DIR},1G,100K \
+        STOPTASKS,${SSTATE_DIR},1G,100K \
+        STOPTASKS,/tmp,100M,100K \
+        HALT,${TMPDIR},100M,1K \
+        HALT,${DL_DIR},100M,1K \
+        HALT,${SSTATE_DIR},100M,1K \
+        HALT,/tmp,10M,1K"
+  network: |
+    DL_DIR = "/var/lib/yocto/downloads"
+    SSTATE_DIR = "/var/lib/yocto/sstate-cache"
+  testing: |
+    LICENSE_FLAGS_ACCEPTED = "synaptics-killswitch"
+    DISTRO_FEATURES:remove = " ptest"
+    DISTRO_FEATURES:append = " systemd usrmerge"
+    VIRTUAL-RUNTIME_init_manager = "systemd"
+    INHERIT += "buildhistory"
+    BUILDHISTORY_COMMIT = "1"
+    IMAGE_INSTALL:append = " netdata"
+    hostname:pn-base-files = "rpi4-netdata"
+    IMAGE_INSTALL:append = " wpa-supplicant"
+    IMAGE_INSTALL:append = " lmsensors"
+    IMAGE_INSTALL:append = " dropbear"
+    IMAGE_INSTALL:append = " curl"
+    IMAGE_INSTALL:append = " python3-core"
+    IMAGE_INSTALL:append = " python3-modules"
