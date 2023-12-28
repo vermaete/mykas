@@ -12,12 +12,12 @@ repos:
   meta-raspberrypi:
     url: https://github.com/agherzan/meta-raspberrypi
     path: layers/meta-raspberrypi
-    refspec: master
+    branch: master
 
   poky:
     url: https://git.yoctoproject.org/git/poky
     path: layers/poky
-    refspec: master
+    branch: master
     layers:
       meta:
       meta-poky:
@@ -26,7 +26,7 @@ repos:
   meta-openembedded:
     url: http://git.openembedded.org/meta-openembedded
     path: layers/meta-openembedded
-    refspec: master
+    branch: master
     layers:
       meta-oe:
       meta-python:
@@ -39,10 +39,10 @@ repos:
   meta-qt5:
     url: https://github.com/meta-qt5/meta-qt5/
     path: layers/meta-qt5
-    refspec: master
+    branch: master
 
   meta-openddds:
-    url: https://github.com/oci-labs/meta-opendds
+    url: git@github.com:vermaete/meta-opendds.git
     path: layers/meta-openddds
     refspec: master
 
@@ -72,13 +72,20 @@ local_conf_header:
         HALT,${SSTATE_DIR},100M,1K \
         HALT,/tmp,10M,1K"
   network: |
+    IMAGE_FEATURES:append = " ssh-server-openssh"
+    IMAGE_FEATURES:append = " allow-empty-password"
+    IMAGE_FEATURES:append = " allow-root-login"
+  build_faster: |
     DL_DIR = "/var/lib/yocto/downloads"
     SSTATE_DIR = "/var/lib/yocto/sstate-cache"
   testing: |
-    DISTRO_FEATURES:append = " systemd"
+    LICENSE_FLAGS_ACCEPTED = "synaptics-killswitch"
+    DISTRO_FEATURES:remove = " ptest"
+    DISTRO_FEATURES:append = " systemd usrmerge"
     VIRTUAL-RUNTIME_init_manager = "systemd"
     INHERIT += "buildhistory"
     BUILDHISTORY_COMMIT = "1"
     IMAGE_INSTALL:append = " wpa-supplicant"
     IMAGE_INSTALL:append = " opendds"
+    IMAGE_INSTALL:append = " opendds-ishapes"
     hostname:pn-base-files = "rpi4-opendds"
