@@ -44,7 +44,7 @@ repos:
   meta-openddds:
     url: git@github.com:vermaete/meta-opendds.git
     path: layers/meta-openddds
-    refspec: master
+    refspec: vermaete/ishapes
 
 bblayers_conf_header:
   standard: |
@@ -78,9 +78,11 @@ local_conf_header:
   build_faster: |
     DL_DIR = "/var/lib/yocto/downloads"
     SSTATE_DIR = "/var/lib/yocto/sstate-cache"
+  ptest: |
+    DISTRO_FEATURES:append = " ptest"
+    EXTRA_IMAGE_FEATURES += "ptest-pkgs"
   testing: |
     LICENSE_FLAGS_ACCEPTED = "synaptics-killswitch"
-    DISTRO_FEATURES:remove = " ptest"
     DISTRO_FEATURES:append = " systemd usrmerge"
     VIRTUAL-RUNTIME_init_manager = "systemd"
     INHERIT += "buildhistory"
@@ -88,4 +90,8 @@ local_conf_header:
     IMAGE_INSTALL:append = " wpa-supplicant"
     IMAGE_INSTALL:append = " opendds"
     IMAGE_INSTALL:append = " opendds-ishapes"
+    IMAGE_INSTALL:append = " opendds-dev"
     hostname:pn-base-files = "rpi4-opendds"
+    DISTRO_FEATURES:remove = "ipv6"
+    PARALLEL_MAKE = "-j 4"
+    BB_NUMBER_THREADS = "4"
