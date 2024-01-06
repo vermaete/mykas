@@ -1,10 +1,10 @@
-# Kas file to build the core-image-minimal with OpenDDS for Raspberry-pi.
-
 header:
-  version: 8
+  version: 1
 
 machine: raspberrypi4-64
+
 distro: poky
+
 target:
   - core-image-minimal-xfce
 
@@ -41,16 +41,17 @@ repos:
     path: layers/meta-qt5
     branch: master
 
-  meta-openddds:
+  meta-opendds:
     url: git@github.com:vermaete/meta-opendds.git
-    path: layers/meta-openddds
-    refspec: vermaete/ishapes
+    path: layers/meta-opendds
+    branch: ishapes
 
 bblayers_conf_header:
   standard: |
     POKY_BBLAYERS_CONF_VERSION = "2"
     BBPATH = "${TOPDIR}"
     BBFILES ?= ""
+
 local_conf_header:
   standard: |
     CONF_VERSION = "2"
@@ -72,26 +73,28 @@ local_conf_header:
         HALT,${SSTATE_DIR},100M,1K \
         HALT,/tmp,10M,1K"
   network: |
+    LICENSE_FLAGS_ACCEPTED = "synaptics-killswitch"
     IMAGE_FEATURES:append = " ssh-server-openssh"
     IMAGE_FEATURES:append = " allow-empty-password"
     IMAGE_FEATURES:append = " allow-root-login"
+    IMAGE_INSTALL:append = " wpa-supplicant"
   build_faster: |
     DL_DIR = "/var/lib/yocto/downloads"
     SSTATE_DIR = "/var/lib/yocto/sstate-cache"
-  ptest: |
-    DISTRO_FEATURES:append = " ptest"
-    EXTRA_IMAGE_FEATURES += "ptest-pkgs"
   testing: |
-    LICENSE_FLAGS_ACCEPTED = "synaptics-killswitch"
     DISTRO_FEATURES:append = " systemd usrmerge"
     VIRTUAL-RUNTIME_init_manager = "systemd"
     INHERIT += "buildhistory"
     BUILDHISTORY_COMMIT = "1"
-    IMAGE_INSTALL:append = " wpa-supplicant"
-    IMAGE_INSTALL:append = " opendds"
-    IMAGE_INSTALL:append = " opendds-ishapes"
-    IMAGE_INSTALL:append = " opendds-dev"
     hostname:pn-base-files = "rpi4-opendds"
     DISTRO_FEATURES:remove = "ipv6"
-    PARALLEL_MAKE = "-j 4"
-    BB_NUMBER_THREADS = "4"
+  pc: |
+    PARALLEL_MAKE = "-j 8"
+    BB_NUMBER_THREADS = "8"
+  opendds: |
+    IMAGE_INSTALL:append = " opendds"
+    ACE_TAO_OPTION = "--doc-group3"
+  ishapes: |
+    IMAGE_INSTALL:append = " opendds-ishapes"
+    PACKAGECONFIG:pn-opendds = " ishapes"
+  
